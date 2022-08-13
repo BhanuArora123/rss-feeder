@@ -33,9 +33,12 @@ export class RSSService {
     async getSubscriptionFeeds(userId){
         let feedData = await rssFeed.findAll({
             where : {
-                userId
+                userId:userId
             }
         });
+        if(!feedData){
+            return new NotFoundException("feed data not found");
+        }
         return {
             feedData,
             message : "fetched successfully"
@@ -44,22 +47,27 @@ export class RSSService {
     async feedsForUser(userId){
         let allFeedForUser = await rssFeed.findAll({
             where:{
-                userId
+                userId:userId
             }
         });
-        let allFeeds = allFeedForUser.map( async (data) => {
+        let allFeeds = [];
+        for(let ind : number = 0 ;ind < allFeedForUser.length;ind++){
+            let data = allFeedForUser[ind];
             let feeds = await axios({
                 url:data.feedUrl,
                 method:"GET"
             });
+            // console.log(feeds.data);
             let jsonData : any = feeds;
             if(!isJSON(data)){
-                jsonData = await jsonToXML(feeds);
+                jsonData = jsonToXML(feeds.data);
             }
-            return {
-                jsonData
-            }
-        })
+            console.log(jsonData);
+            allFeeds.push({
+                name:data.feedName,
+                items:jsonData?.rss?.channel?.item
+            })
+        }
         return {
             allFeeds,
             message :"feeds fetched successfully"

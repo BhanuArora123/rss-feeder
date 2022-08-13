@@ -3,7 +3,11 @@ import { AppModule } from './app.module';
 import {seq} from "./utils/db.config";
 async function bootstrap() {
   await seq.authenticate();
+  seq.sync();
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  app.enableCors({
+    origin:"*"
+  })
+  await app.listen(8080);
 }
 bootstrap();

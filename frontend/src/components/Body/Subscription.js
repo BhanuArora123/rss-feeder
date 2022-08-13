@@ -1,24 +1,20 @@
 import { Button, ListGroup } from "react-bootstrap"
+import { useDispatch, useSelector } from "react-redux"
+import { deleteFeed } from "../../store/feed";
 
 const Subscription = () => {
-    let subscriptions = [
-        {
-            name :"lorem ipsum",
-            link :"http://localhost:8080/"
-        },
-        {
-            name :"lorem ipsum",
-            link :"http://localhost:8080/"
-        },
-        {
-            name :"lorem ipsum",
-            link :"http://localhost:8080/"
+    let subscriptions = useSelector(state => state.feeds);
+    console.log(subscriptions);
+    const dispatch = useDispatch();
+    const deleteSubsHandler = (id) => {
+        return () => {
+            dispatch(deleteFeed(id));
         }
-    ];
+    }
     return (
         <ListGroup>
             {
-                subscriptions.map(({name, link}) => {
+                subscriptions.feedSubscriptions.map(({feedName:name, feedUrl:link, feedId: id}) => {
                     return (
                         <ListGroup.Item className="d-flex justify-content-evenly align-items-center">
                             <div>
@@ -27,7 +23,7 @@ const Subscription = () => {
                             <div>
                                 {link}
                             </div>
-                            <Button>
+                            <Button onClick={deleteSubsHandler(id)}>
                                 Delete
                             </Button>
                         </ListGroup.Item>

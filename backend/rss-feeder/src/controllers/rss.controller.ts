@@ -1,5 +1,5 @@
 import { RSSService } from './../services/rss.services';
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Query, Post } from "@nestjs/common";
 
 @Controller("rss")
 export class RSSFeedController{
@@ -14,17 +14,18 @@ export class RSSFeedController{
     }
 
     @Get("getSubscriptionFeeds")
-    getSubscriptionFeeds(@Param('id') userId: string){
+    getSubscriptionFeeds(@Query('id') userId: string){
+        console.log(userId);
         return this.rssService.getSubscriptionFeeds(userId);
     }
 
     @Delete("unsubscribe")
-    unsubscribe(@Body('id') userId : string, @Body('feedId') feedId : number){
+    unsubscribe(@Query('id') userId : string, @Query('feedId') feedId : number){
         return this.rssService.unsubscribeFromFeed(userId,feedId);
     }
 
     @Get("fetch")
-    getFeeds(@Body('id') userId : string){
+    getFeeds(@Query('id') userId : string){
         return this.rssService.feedsForUser(userId);
     }
 }

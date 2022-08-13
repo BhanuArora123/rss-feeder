@@ -1,4 +1,5 @@
-import { parseString } from "xml2js";
+const xmlParser = require("xml-js");
+const convert = require("iconv-lite");
 export const isJSON = (data) => {
     try {
         JSON.parse(data);
@@ -8,13 +9,10 @@ export const isJSON = (data) => {
     }
 }
 export const jsonToXML = (data) => {
-    return new Promise((resolve,reject) => {
-        try {
-            parseString(data,{trim : true},(results) => {
-                resolve(JSON.stringify(results));
-            })
-        } catch (error) {
-            reject(error);
-        }
-    });
+    let xmlData = data;
+    return xmlParser.xml2js(xmlData,{
+		compact: true,
+		ignoreDoctype: true,
+		attributesKey: "attributes"
+	});
 }

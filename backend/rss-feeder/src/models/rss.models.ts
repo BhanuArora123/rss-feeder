@@ -1,4 +1,4 @@
-import {  NUMBER, STRING } from "sequelize/types";
+import {  INTEGER, NUMBER, STRING } from "sequelize";
 import { seq } from "src/utils/db.config";
 export const rssFeed = seq.define('feeds',{
     userId:{
@@ -11,7 +11,7 @@ export const rssFeed = seq.define('feeds',{
         allowNull:false
     },
     feedId:{
-        type : NUMBER,
+        type : INTEGER,
         unique:true,
         allowNull:false,
         primaryKey:true,
